@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '2.7.6'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
@@ -36,4 +37,66 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
+
+    def QClass = []
+    for (qPattern in "**/QA".."**/QZ") {
+        QClass.add(qPattern + "*")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            "**/CoffeeBeanServerApplication*"
+                    ] + QClass)
+        }))
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    def QClass = []
+    for (qPattern in '*.QA'..'*.QZ') {
+        QClass.add(qPattern + '*')
+    }
+
+    violationRules {
+        rule {
+            enabled = true
+            element = 'BUNDLE'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+//                minimum = 0.80
+            }
+
+            excludes = [
+                    '**.CoffeeBeanServerApplication*'
+            ] + QClass
+        }
+    }
+    finalizedBy 'copyReports'
+}
+
+jacocoTestReport.doFirst {
+    delete file('src/main/resources/static/reports')
+}
+
+task copyReports(type: Copy) {
+    dependsOn('jacocoTestCoverageVerification')
+    from file("build/reports/jacoco/test/html")
+    into file("src/main/resources/static/reports")
 }
