@@ -7,6 +7,10 @@ spring:
   web:
     resources:
       add-mappings: false
+  profiles:
+    group:
+      "local": "console-logging"
+      "dev": "file-logging,console-logging"
   jpa:
     open-in-view: true
     show-sql: true
