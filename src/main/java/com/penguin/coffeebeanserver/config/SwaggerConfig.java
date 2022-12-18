@@ -33,7 +33,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "ILoveCoffeeBean API",
-                "ILoveCoffeeBean API Descripion",
+                "ILoveCoffeeBean API Description",
                 "1.0",
                 "Coffee Bean Dictionary",
                 new Contact("Contact Me", "https://github.com/ILoveCoffeeBean/coffee-bean-server", "it@i-love-coffee-bean.com"),
