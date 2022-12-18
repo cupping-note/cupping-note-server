@@ -33,6 +33,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // swagger
+    implementation 'io.springfox:springfox-swagger2:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 }
 
 tasks.named('test') {
@@ -59,7 +63,8 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
-                            "**/CoffeeBeanServerApplication*"
+                            "**/CoffeeBeanServerApplication*",
+                            '**/*Config*'
                     ] + QClass)
         }))
     }
@@ -84,7 +89,8 @@ jacocoTestCoverageVerification {
             }
 
             excludes = [
-                    '**.CoffeeBeanServerApplication*'
+                    '**.CoffeeBeanServerApplication*',
+                    '**/*Config*'
             ] + QClass
         }
     }
