@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
     <property name="LOG_PATH" value="./logs"/>
-    <property name="LOG_FILE_NAME" value="coffee-bean"/>
+    <property name="LOG_FILE_NAME" value="cupping-note"/>
     <property name="LOG_PATTERN"
               value="%white(%d{HH:mm:ss.SSS}) %cyan([%thread]) %highlight([%-5level]) %yellow([%logger{0}]) - %boldWhite(%m%n)"/>
     <property name="LOG_FILE_PATTERN"

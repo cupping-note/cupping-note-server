@@ -1,4 +1,4 @@
-package com.penguin.coffeebeanserver.config;
+package com.penguin.cuppingnote.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
