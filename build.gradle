@@ -63,7 +63,7 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: [
-                            "**/CoffeeBeanServerApplication*",
+                            "**/CuppingNoteApplication*",
                             '**/*Config*'
                     ] + QClass)
         }))
@@ -89,7 +89,7 @@ jacocoTestCoverageVerification {
             }
 
             excludes = [
-                    '**.CoffeeBeanServerApplication*',
+                    '**.CuppingNoteApplication*',
                     '**/*Config*'
             ] + QClass
         }

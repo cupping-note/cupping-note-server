@@ -1,4 +1,4 @@
-package com.penguin.coffeebeanserver.config;
+package com.penguin.cuppingnote.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class SwaggerConfig {
                 .apiInfo(this.apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors
-                        .basePackage("com.penguin.coffeebeanserver")
+                        .basePackage("com.penguin.cuppingnote")
                 )
                 .paths(PathSelectors.any())
                 .build();
@@ -32,13 +32,13 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "ILoveCoffeeBean API",
-                "ILoveCoffeeBean API Description",
+                "Cupping Note API",
+                "Cupping Note API Description",
                 "1.0",
-                "Coffee Bean Dictionary",
-                new Contact("Contact Me", "https://github.com/ILoveCoffeeBean/coffee-bean-server", "it@i-love-coffee-bean.com"),
+                "https://github.com/cupping-note/cupping-note-server",
+                new Contact("Contact Me", "https://github.com/cupping-note/cupping-note-server", "it@cupping-note.com"),
                 "Licenses",
-                "https://github.com/ILoveCoffeeBean/coffee-bean-server",
+                "https://github.com/cupping-note/cupping-note-server",
                 Collections.emptyList()
         );
     }
