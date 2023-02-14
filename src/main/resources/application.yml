@@ -25,3 +25,13 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
+  config:
+    import: optional:file:.env[.properties]
+
+oauth:
+  kakao:
+    auth-url: ${KAKAO_OAUTH_URL}
+    user-url: ${KAKAO_USER_URL}
+    grant-type: "authorization_code"
+    rest-api-key: ${KAKAO_REST_API_KEY}
+    client-secret: ${KAKAO_CLIENT_SECRET}
