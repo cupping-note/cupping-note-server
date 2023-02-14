@@ -19,6 +19,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    springCloudVersion = '2021.0.3'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,6 +41,18 @@ dependencies {
     // swagger
     implementation 'io.springfox:springfox-swagger2:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+    // openfeign
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+    // annotation processor
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 tasks.named('test') {
