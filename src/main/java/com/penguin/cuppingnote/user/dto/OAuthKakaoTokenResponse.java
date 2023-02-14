@@ -1,6 +1,7 @@
 package com.penguin.cuppingnote.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,19 +12,12 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class OAuthKakaoTokenResponse {
-    @JsonProperty("token_type")
     private String tokenType;
-
-    @JsonProperty("access_token")
     private String accessToken;
-
-    @JsonProperty("id_token")
     private String idToken;
-
-    @JsonProperty("expires_in")
     private Integer expiresIn;
-
     private String scope;
 
     // todo: Bearer spring security 도입 후 상수 처리
