@@ -1,4 +1,4 @@
-package com.penguin.cuppingnote.user.dto;
+package com.penguin.cuppingnote.oauth.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

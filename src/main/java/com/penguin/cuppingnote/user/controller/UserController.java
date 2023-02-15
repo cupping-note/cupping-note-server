@@ -1,6 +1,6 @@
 package com.penguin.cuppingnote.user.controller;
 
-import com.penguin.cuppingnote.user.dto.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
 import com.penguin.cuppingnote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

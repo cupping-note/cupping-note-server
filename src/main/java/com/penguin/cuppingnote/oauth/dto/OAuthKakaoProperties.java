@@ -1,4 +1,4 @@
-package com.penguin.cuppingnote.user.dto;
+package com.penguin.cuppingnote.oauth.dto;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
