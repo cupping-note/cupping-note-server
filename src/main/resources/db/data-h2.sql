@@ -1,2 +1,3 @@
--- Greeting 더미 데이터 생성
-INSERT INTO greeting(`id`, `message`) VALUES (1, '환영합니다.'), (2, 'h2 DB에 데이터가 잘 저장되네요.');
+-- Users 더미 데이터 생성
+INSERT INTO users (`id`, `email`, `nickname`, `profile_image_url`, `oauth_platform`, `created_at`, `updated_at`, `deleted_at`)
+VALUES (1, 'white_gyu@naver.com', 'hbk', null, 'KAKAO', '2023-02-15 22:48:59', '2023-02-15 22:48:59', null);

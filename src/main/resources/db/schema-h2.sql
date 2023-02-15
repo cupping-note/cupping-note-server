@@ -1,9 +1,17 @@
-DROP TABLE IF EXISTS greeting;
+DROP TABLE IF EXISTS users;
 
-CREATE TABLE greeting
+create table users
 (
-    `id`         bigint       NOT NULL AUTO_INCREMENT COMMENT 'id',
-    `message`    varchar(255) NOT NULL COMMENT '메시지',
-    `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP() COMMENT '생성 일자',
-    PRIMARY KEY (`id`)
-);
+    `id`                bigint auto_increment comment '사용자 ID',
+    `email`             varchar(128)                       not null comment '사용자 이메일',
+    `nickname`          varchar(64)                        not null comment '닉네임',
+    `profile_image_url` varchar(256)                       null comment '프로필 사진 url',
+    `oauth_platform`    enum ('KAKAO', 'APPLE')            not null comment '사용자 로그인한 sns 플랫폼',
+    `created_at`        datetime                           not null default CURRENT_TIMESTAMP comment '생성한 시간',
+    `updated_at`        datetime                           not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '수정한 시간',
+    `deleted_at`        datetime                           null comment '삭제한 시간',
+    primary key (`id`),
+    constraint users_pk unique (`email`),
+    index users_email_index(`email`)
+)
+comment '사용자 정보 관리 테이블';
