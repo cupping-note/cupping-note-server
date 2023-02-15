@@ -2,6 +2,8 @@ package com.penguin.cuppingnote.user.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.penguin.cuppingnote.oauth.domain.OAuthPlatforms;
+import com.penguin.cuppingnote.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,5 +79,14 @@ public class OAuthKakaoUserResponse {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Partner {
         private String uuid;
+    }
+
+    public User toUserEntity() {
+        return User.builder()
+                .email(this.kakaoAccount.email)
+                .nickName(this.properties.nickname)
+                .profileImageUrl(this.properties.profileImage)
+                .oauthPlatform(OAuthPlatforms.KAKAO)
+                .build();
     }
 }
