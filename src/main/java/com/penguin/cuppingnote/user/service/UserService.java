@@ -1,12 +1,9 @@
 package com.penguin.cuppingnote.user.service;
 
+import com.penguin.cuppingnote.oauth.service.OAuthService;
 import com.penguin.cuppingnote.user.domain.User;
 import com.penguin.cuppingnote.user.domain.UserRepository;
-import com.penguin.cuppingnote.user.dto.OAuthKakaoProperties;
-import com.penguin.cuppingnote.user.dto.OAuthKakaoTokenResponse;
-import com.penguin.cuppingnote.user.dto.OAuthKakaoUserResponse;
-import com.penguin.cuppingnote.user.feign.OAuthTokenClient;
-import com.penguin.cuppingnote.user.feign.OAuthUserClient;
+import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +12,7 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final OAuthKakaoProperties oAuthKakaoProperties;
-    private final OAuthTokenClient oAuthTokenClient;
-    private final OAuthUserClient oAuthUserClient;
+    private final OAuthService oAuthService;
     private final UserRepository userRepository;
 
     @Transactional
@@ -25,11 +20,7 @@ public class UserService {
             String thisUrl,
             String authorizationCode
     ) {
-        OAuthKakaoTokenResponse oAuthKakaoToken = oAuthTokenClient.getOAuthKakaoToken(
-          oAuthKakaoProperties.toOAuthKakaoTokenRequestWith(thisUrl, authorizationCode)
-        );
-
-        OAuthKakaoUserResponse kakaoUserEntity = oAuthUserClient.getKakaoUserEntity(oAuthKakaoToken.getAccessTokenForAuthorization());
+        OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(thisUrl, authorizationCode);
 
         User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
