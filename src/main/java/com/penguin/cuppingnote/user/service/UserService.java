@@ -1,5 +1,7 @@
 package com.penguin.cuppingnote.user.service;
 
+import com.penguin.cuppingnote.user.domain.User;
+import com.penguin.cuppingnote.user.domain.UserRepository;
 import com.penguin.cuppingnote.user.dto.OAuthKakaoProperties;
 import com.penguin.cuppingnote.user.dto.OAuthKakaoTokenResponse;
 import com.penguin.cuppingnote.user.dto.OAuthKakaoUserResponse;
@@ -16,6 +18,7 @@ public class UserService {
     private final OAuthKakaoProperties oAuthKakaoProperties;
     private final OAuthTokenClient oAuthTokenClient;
     private final OAuthUserClient oAuthUserClient;
+    private final UserRepository userRepository;
 
     @Transactional
     public OAuthKakaoUserResponse loginByKakao(
@@ -26,9 +29,12 @@ public class UserService {
           oAuthKakaoProperties.toOAuthKakaoTokenRequestWith(thisUrl, authorizationCode)
         );
 
-        return oAuthUserClient.getKakaoUserEntity(oAuthKakaoToken.getAccessTokenForAuthorization());
+        OAuthKakaoUserResponse kakaoUserEntity = oAuthUserClient.getKakaoUserEntity(oAuthKakaoToken.getAccessTokenForAuthorization());
 
-        // 회원 가입 vs 로그인 처리
+        User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
+                .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
+
+        return null;
 
         // jwt 발행
 
