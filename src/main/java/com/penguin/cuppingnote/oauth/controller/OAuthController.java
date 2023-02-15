@@ -1,4 +1,4 @@
-package com.penguin.cuppingnote.user.controller;
+package com.penguin.cuppingnote.oauth.controller;
 
 import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
 import com.penguin.cuppingnote.user.service.UserService;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/oauth")
 @RequiredArgsConstructor
-public class UserController {
+public class OAuthController {
     private final UserService userService;
 
     @GetMapping("/callback/kakao")
