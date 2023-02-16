@@ -3,8 +3,8 @@ package com.penguin.cuppingnote.oauth.service;
 import com.penguin.cuppingnote.oauth.feign.OAuthTokenClient;
 import com.penguin.cuppingnote.oauth.feign.OAuthUserClient;
 import com.penguin.cuppingnote.oauth.dto.OAuthKakaoProperties;
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoTokenResponse;
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoTokenResponse;
+import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

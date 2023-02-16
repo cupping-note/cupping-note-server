@@ -1,7 +1,7 @@
 package com.penguin.cuppingnote.oauth.feign;
 
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoTokenRequest;
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoTokenResponse;
+import com.penguin.cuppingnote.oauth.dto.request.OAuthKakaoTokenRequest;
+import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.PostMapping;

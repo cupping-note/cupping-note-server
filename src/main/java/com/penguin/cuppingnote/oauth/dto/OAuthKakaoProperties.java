@@ -1,5 +1,6 @@
 package com.penguin.cuppingnote.oauth.dto;
 
+import com.penguin.cuppingnote.oauth.dto.request.OAuthKakaoTokenRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConstructorBinding;
