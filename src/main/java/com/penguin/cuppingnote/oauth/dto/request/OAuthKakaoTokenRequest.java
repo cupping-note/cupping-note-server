@@ -1,4 +1,4 @@
-package com.penguin.cuppingnote.oauth.dto;
+package com.penguin.cuppingnote.oauth.dto.request;
 
 import feign.Param;
 import lombok.AccessLevel;

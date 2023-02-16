@@ -1,9 +1,11 @@
 package com.penguin.cuppingnote.oauth.controller;
 
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.jwt.JwtAuthentication;
+import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
 import com.penguin.cuppingnote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +20,7 @@ public class OAuthController {
     private final UserService userService;
 
     @GetMapping("/callback/kakao")
-    public ResponseEntity<OAuthKakaoUserResponse> loginByKakao(
+    public ResponseEntity<UserLoginResponseDto> loginByKakao(
             HttpServletRequest request,
             @RequestParam("code") String authorizationCode
     ) {
@@ -28,5 +30,12 @@ public class OAuthController {
                         authorizationCode
                 )
         );
+    }
+
+    @GetMapping
+    public String test(
+            @AuthenticationPrincipal final JwtAuthentication jwtAuthentication
+    ) {
+        return jwtAuthentication.userId + "\n" + jwtAuthentication.email + "\n" + jwtAuthentication.token;
     }
 }

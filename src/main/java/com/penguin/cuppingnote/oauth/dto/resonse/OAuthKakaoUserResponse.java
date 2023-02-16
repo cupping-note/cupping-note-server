@@ -1,8 +1,9 @@
-package com.penguin.cuppingnote.oauth.dto;
+package com.penguin.cuppingnote.oauth.dto.resonse;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.penguin.cuppingnote.oauth.domain.OAuthPlatforms;
+import com.penguin.cuppingnote.user.domain.Role;
 import com.penguin.cuppingnote.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -87,6 +88,7 @@ public class OAuthKakaoUserResponse {
                 .nickName(this.properties.nickname)
                 .profileImageUrl(this.properties.profileImage)
                 .oauthPlatform(OAuthPlatforms.KAKAO)
+                .role(Role.USER)
                 .build();
     }
 }
