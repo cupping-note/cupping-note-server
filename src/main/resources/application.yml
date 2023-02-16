@@ -35,3 +35,9 @@ oauth:
     grant-type: "authorization_code"
     rest-api-key: ${KAKAO_REST_API_KEY}
     client-secret: ${KAKAO_CLIENT_SECRET}
+
+jwt:
+  header: Authorization
+  issuer: cupping_note
+  client-secret: ${JWT_SECRET}
+  expiry-seconds: 2592000
