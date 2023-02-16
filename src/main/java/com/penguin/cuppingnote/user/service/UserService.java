@@ -1,10 +1,15 @@
 package com.penguin.cuppingnote.user.service;
 
+import com.penguin.cuppingnote.jwt.JwtAuthentication;
+import com.penguin.cuppingnote.jwt.JwtAuthenticationToken;
 import com.penguin.cuppingnote.oauth.service.OAuthService;
 import com.penguin.cuppingnote.user.domain.User;
 import com.penguin.cuppingnote.user.domain.UserRepository;
-import com.penguin.cuppingnote.oauth.dto.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,11 +17,12 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final AuthenticationManager authenticationManager;
     private final OAuthService oAuthService;
     private final UserRepository userRepository;
 
     @Transactional
-    public OAuthKakaoUserResponse loginByKakao(
+    public UserLoginResponseDto loginByKakao(
             String thisUrl,
             String authorizationCode
     ) {
@@ -25,10 +31,19 @@ public class UserService {
         User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
 
-        return null;
+        final JwtAuthentication authentication = getJwtBy(user.getEmail());
 
-        // jwt 발행
+        return UserLoginResponseDto.succeed(
+                authentication.token,
+                user.getId()
+        );
+    }
 
-        // jwt 반환
+    private JwtAuthentication getJwtBy(String email) {
+        final JwtAuthenticationToken authToken = new JwtAuthenticationToken(email);
+
+        final Authentication resultToken = authenticationManager.authenticate(authToken);
+
+        return (JwtAuthentication) resultToken.getPrincipal();
     }
 }
