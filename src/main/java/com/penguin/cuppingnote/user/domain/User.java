@@ -41,4 +41,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Comment("사용자 로그인한 sns 플랫폼")
     private OAuthPlatforms oauthPlatform;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Comment("사용자 권한")
+    private Role role;
 }
