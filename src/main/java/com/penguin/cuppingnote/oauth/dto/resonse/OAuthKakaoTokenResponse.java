@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static org.springframework.cloud.openfeign.security.OAuth2FeignRequestInterceptor.BEARER;
+
 /**
  * Kakao Oauth 토큰 반환값
  * docs url : https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#request-token-response
@@ -20,9 +22,7 @@ public class OAuthKakaoTokenResponse {
     private Integer expiresIn;
     private String scope;
 
-    // todo: Bearer spring security 도입 후 상수 처리
-    // https://docs.spring.io/spring-security/oauth/apidocs/constant-values.html
     public String getAccessTokenForAuthorization() {
-        return "Bearer " + this.accessToken;
+        return BEARER + " " + this.accessToken;
     }
 }
