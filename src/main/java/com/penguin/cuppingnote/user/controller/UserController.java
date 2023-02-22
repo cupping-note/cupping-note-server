@@ -6,10 +6,9 @@ import com.penguin.cuppingnote.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,15 +17,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/kakao/login")
-    public ResponseEntity<UserLoginResponseDto> loginByKakao(
-            HttpServletRequest request,
-            UserKakaoLoginRequestDto userKakaoLoginRequestDto
-    ) {
+    public ResponseEntity<UserLoginResponseDto> loginByKakao(@RequestBody UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
         return ResponseEntity.ok(
-                userService.loginByKakao(
-                        request.getRequestURL().toString(),
-                        userKakaoLoginRequestDto
-                )
+                userService.loginByKakao(userKakaoLoginRequestDto)
         );
     }
 }

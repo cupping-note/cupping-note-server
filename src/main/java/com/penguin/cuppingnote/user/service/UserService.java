@@ -23,11 +23,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserLoginResponseDto loginByKakao(
-            String thisUrl,
-            UserKakaoLoginRequestDto userKakaoLoginRequestDto
-    ) {
-        final OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(thisUrl, userKakaoLoginRequestDto.getAuthorizationCode());
+    public UserLoginResponseDto loginByKakao(UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
+        final OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(userKakaoLoginRequestDto);
 
         final User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));

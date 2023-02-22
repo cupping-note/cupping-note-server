@@ -5,6 +5,7 @@ import com.penguin.cuppingnote.oauth.feign.OAuthUserClient;
 import com.penguin.cuppingnote.oauth.dto.OAuthKakaoProperties;
 import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoTokenResponse;
 import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.user.dto.request.UserKakaoLoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,9 @@ public class OAuthService {
     private final OAuthTokenClient oAuthTokenClient;
     private final OAuthUserClient oAuthUserClient;
 
-    public OAuthKakaoUserResponse getKakaoUserEntity(
-            String redirectUrl,
-            String authorizationCode
-    ) {
+    public OAuthKakaoUserResponse getKakaoUserEntity(UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
         OAuthKakaoTokenResponse oAuthKakaoToken = oAuthTokenClient.getOAuthKakaoToken(
-                oAuthKakaoProperties.toOAuthKakaoTokenRequestWith(redirectUrl, authorizationCode)
+                oAuthKakaoProperties.toOAuthKakaoTokenRequestWith(userKakaoLoginRequestDto)
         );
 
         return oAuthUserClient.getKakaoUserEntity(oAuthKakaoToken.getAccessTokenForAuthorization());

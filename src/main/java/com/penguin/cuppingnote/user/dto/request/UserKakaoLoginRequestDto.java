@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserKakaoLoginRequestDto {
+    private String redirectUri;
     private String authorizationCode;
 }
