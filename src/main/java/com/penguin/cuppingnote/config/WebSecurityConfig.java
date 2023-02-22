@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers(HttpMethod.GET, "/oauth/callback/kakao", "/swagger", "/swagger-resources/**")
+                .antMatchers("/user/kakao/login", "/swagger", "/swagger-resources/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
