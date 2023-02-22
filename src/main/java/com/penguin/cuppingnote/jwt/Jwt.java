@@ -4,6 +4,8 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.penguin.cuppingnote.common.exception.jwt.ExpiredTokenException;
 import com.penguin.cuppingnote.common.exception.jwt.InvalidTokenException;
 import lombok.Getter;
 
@@ -50,6 +52,8 @@ public class Jwt {
     public Claims verify(final String token) {
         try {
             return new Claims(jwtVerifier.verify(token));
+        } catch (final TokenExpiredException e) {
+            throw new ExpiredTokenException();
         } catch (final JWTVerificationException e) {
             throw new InvalidTokenException();
         }
