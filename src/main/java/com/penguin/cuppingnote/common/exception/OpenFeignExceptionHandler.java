@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class OpenFeignErrorHandler implements ErrorDecoder {
+public class OpenFeignExceptionHandler implements ErrorDecoder {
     private final StringDecoder stringDecoder;
 
     @Override
