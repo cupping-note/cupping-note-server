@@ -6,6 +6,7 @@ import com.penguin.cuppingnote.oauth.service.OAuthService;
 import com.penguin.cuppingnote.user.domain.User;
 import com.penguin.cuppingnote.user.domain.UserRepository;
 import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.user.dto.request.UserKakaoLoginRequestDto;
 import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,11 +25,11 @@ public class UserService {
     @Transactional
     public UserLoginResponseDto loginByKakao(
             String thisUrl,
-            String authorizationCode
+            UserKakaoLoginRequestDto userKakaoLoginRequestDto
     ) {
-        OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(thisUrl, authorizationCode);
+        final OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(thisUrl, userKakaoLoginRequestDto.getAuthorizationCode());
 
-        User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
+        final User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
 
         final JwtAuthentication authentication = getJwtBy(user.getEmail());
