@@ -28,6 +28,13 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 3000
+        read-timeout: 3000
+
 oauth:
   kakao:
     auth-url: ${KAKAO_OAUTH_URL}
