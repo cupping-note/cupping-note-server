@@ -5,14 +5,32 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import static java.util.Objects.requireNonNull;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final String VALID_LOG_FORMAT = "Class : {}, Error : {}, ErrorMessage : {}";
     private static final String LOG_FORMAT = "Class : {}, ErrorMessage : {}";
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> methodArgumentNotValidException(
+            final MethodArgumentNotValidException e
+    ) {
+        final String errorMessage = requireNonNull(e.getFieldError())
+                .getDefaultMessage();
+
+        log.warn(VALID_LOG_FORMAT, e.getClass().getSimpleName(), "@Valid", errorMessage);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(errorMessage));
+    }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(
