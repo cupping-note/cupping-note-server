@@ -1,5 +1,6 @@
 package com.penguin.cuppingnote.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationFilter;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationProvider;
@@ -7,7 +8,6 @@ import com.penguin.cuppingnote.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -28,6 +28,7 @@ import java.util.Objects;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfig jwtConfig;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void configure(final WebSecurity webSecurity) {
@@ -87,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(
                 jwtConfig.getHeader(),
-                getApplicationContext().getBean(Jwt.class)
+                getApplicationContext().getBean(Jwt.class),
+                objectMapper
         );
     }
 

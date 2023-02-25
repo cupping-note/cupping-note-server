@@ -2,11 +2,20 @@ package com.penguin.cuppingnote.jwt;
 
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,5 +54,21 @@ public class Claims {
         claims.roles = roles;
 
         return claims;
+    }
+
+    public JwtAuthenticationDto toJwtAuthenticationDto() {
+        return JwtAuthenticationDto.builder()
+                .userId(userId)
+                .email(email)
+                .authorities(getAuthorities())
+                .build();
+    }
+
+    private List<GrantedAuthority> getAuthorities() {
+        return Objects.isNull(roles) || roles.length == 0
+                ? emptyList()
+                : Arrays.stream(roles)
+                .map(SimpleGrantedAuthority::new)
+                .collect(toList());
     }
 }
