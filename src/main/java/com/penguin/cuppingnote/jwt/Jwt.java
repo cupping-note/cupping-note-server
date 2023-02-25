@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.penguin.cuppingnote.common.exception.jwt.ExpiredTokenException;
 import com.penguin.cuppingnote.common.exception.jwt.InvalidTokenException;
+import com.penguin.cuppingnote.common.exception.jwt.TokenNotFoundException;
 import lombok.Getter;
 
 import java.util.Date;
@@ -49,13 +50,15 @@ public class Jwt {
         return builder.sign(algorithm);
     }
 
-    public Claims verify(final String token) {
+    public Claims verify(final String token) throws JWTVerificationException{
         try {
             return new Claims(jwtVerifier.verify(token));
         } catch (final TokenExpiredException e) {
             throw new ExpiredTokenException();
         } catch (final JWTVerificationException e) {
             throw new InvalidTokenException();
+        } catch (final NullPointerException e) {
+            throw new TokenNotFoundException();
         }
     }
 }
