@@ -1,6 +1,5 @@
 package com.penguin.cuppingnote.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationFilter;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationProvider;
@@ -8,6 +7,7 @@ import com.penguin.cuppingnote.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.web.cors.CorsUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
@@ -28,7 +27,6 @@ import java.util.Objects;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfig jwtConfig;
-    private final ObjectMapper objectMapper;
 
     @Override
     public void configure(final WebSecurity webSecurity) {
@@ -38,11 +36,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/h2-console/**",
                         "/v2/api-docs",
                         "/configuration/ui",
-                        "/swagger-resources",
+                        "/swagger-resources/**",
                         "/configuration/security",
-                        "/swagger-ui.html",
+                        "/swagger-ui/index.html",
                         "/webjars/**",
-                        "/swagger/**"
+                        "/swagger-ui/**"
                 );
     }
 
@@ -88,8 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(
                 jwtConfig.getHeader(),
-                getApplicationContext().getBean(Jwt.class),
-                objectMapper
+                getApplicationContext().getBean(Jwt.class)
         );
     }
 
@@ -97,29 +94,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/user/kakao/login", "/swagger", "/swagger-resources/**")
-                .permitAll()
-                .anyRequest().authenticated()
-                .and()
+                    .antMatchers(HttpMethod.POST, "/user/kakao/login").permitAll()
+                    .antMatchers(HttpMethod.GET, "/swagger").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
                 .headers()
-                .disable()
+                    .disable()
                 .csrf()
-                .disable()
+                    .disable()
                 .formLogin()
-                .disable()
+                    .disable()
                 .httpBasic()
-                .disable()
+                    .disable()
                 .rememberMe()
-                .disable()
+                    .disable()
                 .logout()
-                .disable()
+                    .disable()
                 .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler())
-                .and()
+                    .accessDeniedHandler(accessDeniedHandler())
+                    .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
                 .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
         ;
     }
