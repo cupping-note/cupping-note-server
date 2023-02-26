@@ -1,6 +1,5 @@
 package com.penguin.cuppingnote.user.controller;
 
-import com.penguin.cuppingnote.jwt.JwtAuthentication;
 import com.penguin.cuppingnote.user.dto.request.UserKakaoLoginRequestDto;
 import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
 import com.penguin.cuppingnote.user.service.UserService;
@@ -12,8 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -34,13 +35,6 @@ public class UserController {
     public ResponseEntity<UserLoginResponseDto> loginByKakao(@Valid @RequestBody UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
         return ResponseEntity.ok(
                 userService.loginByKakao(userKakaoLoginRequestDto)
-        );
-    }
-
-    @GetMapping
-    public ResponseEntity<String> getUser(@AuthenticationPrincipal final JwtAuthentication authentication) {
-        return ResponseEntity.ok(
-                authentication.email + " " + authentication.userId
         );
     }
 }
