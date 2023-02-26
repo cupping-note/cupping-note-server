@@ -50,6 +50,7 @@ public class OAuthKakaoUserResponse {
         private Boolean isEmailValid;
         private Boolean isEmailVerified;
         private String email;
+        private Boolean hasEmail;
         private Boolean ageRangeNeedsAgreement;
         private String ageRange;
         private Boolean birthyearNeedsAgreement;

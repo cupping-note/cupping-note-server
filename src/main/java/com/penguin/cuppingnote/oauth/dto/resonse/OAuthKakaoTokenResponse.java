@@ -20,6 +20,8 @@ public class OAuthKakaoTokenResponse {
     private String accessToken;
     private String idToken;
     private Integer expiresIn;
+    private String refreshToken;
+    private Integer refreshTokenExpiresIn;
     private String scope;
 
     public String getAccessTokenForAuthorization() {
