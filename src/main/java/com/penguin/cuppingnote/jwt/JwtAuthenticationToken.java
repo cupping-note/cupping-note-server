@@ -48,12 +48,12 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     public static JwtAuthenticationToken of(
-            final String token,
+            final String accessToken,
             final JwtAuthenticationDto jwtAuthenticationDto,
             final HttpServletRequest request
     ) {
         JwtAuthenticationToken authentication = new JwtAuthenticationToken(
-                new JwtAuthentication(token, jwtAuthenticationDto.getUserId(), jwtAuthenticationDto.getEmail()),
+                new JwtAuthentication(null, accessToken, jwtAuthenticationDto.getUserId(), jwtAuthenticationDto.getEmail()),
                 null,
                 jwtAuthenticationDto.getAuthorities()
         );

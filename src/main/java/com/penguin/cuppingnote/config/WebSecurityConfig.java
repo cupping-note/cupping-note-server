@@ -67,7 +67,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new Jwt(
                 jwtConfig.getIssuer(),
                 jwtConfig.getClientSecret(),
-                jwtConfig.getExpirySeconds()
+                jwtConfig.getRefreshTokenExpirySeconds(),
+                jwtConfig.getAccessTokenExpirySeconds()
         );
     }
 

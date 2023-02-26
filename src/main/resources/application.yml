@@ -47,4 +47,5 @@ jwt:
   header: Authorization
   issuer: cupping_note
   client-secret: ${JWT_SECRET}
-  expiry-seconds: 2592000
+  refresh-token-expiry-seconds: 2592000 # 60초 * 60분 * 24시간 * 30일 = 1달
+  access-token-expiry-seconds: 86400 # 60초 * 60분 * 24시간 = 1일

@@ -6,19 +6,26 @@ import com.penguin.cuppingnote.common.exception.jwt.UserInformationNotFoundExcep
 import java.util.Objects;
 
 public class JwtAuthentication {
-    public final String token;
+    public final String refreshToken;
+    public final String accessToken;
     public final Long userId;
     public final String email;
 
-    public JwtAuthentication(final String token, final Long userId, final String email) {
-        if (Objects.isNull(token))
+    public JwtAuthentication(
+            final String refreshToken,
+            final String accessToken,
+            final Long userId,
+            final String email
+    ) {
+        if (Objects.isNull(refreshToken) || Objects.isNull(accessToken))
             throw new TokenNotFoundException();
         if (Objects.isNull(userId))
             throw new UserInformationNotFoundException();
         if (Objects.isNull(email))
             throw new UserInformationNotFoundException();
 
-        this.token = token;
+        this.refreshToken = refreshToken;
+        this.accessToken = accessToken;
         this.userId = userId;
         this.email = email;
     }

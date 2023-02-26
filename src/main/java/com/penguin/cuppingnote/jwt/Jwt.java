@@ -16,25 +16,39 @@ import java.util.Date;
 public class Jwt {
     private final String issuer;
     private final String clientSecret;
-    private final int expirySeconds;
+    private final int refreshTokenExpirySeconds;
+    private final int accessTokenExpirySeconds;
     private final Algorithm algorithm;
     private final JWTVerifier jwtVerifier;
 
     public Jwt(
             final String issuer,
             final String clientSecret,
-            final int expirySeconds
+            final int refreshTokenExpirySeconds,
+            final int accessTokenExpirySeconds
     ) {
         this.issuer = issuer;
         this.clientSecret = clientSecret;
-        this.expirySeconds = expirySeconds;
+        this.refreshTokenExpirySeconds = refreshTokenExpirySeconds;
+        this.accessTokenExpirySeconds = accessTokenExpirySeconds;
         this.algorithm = Algorithm.HMAC512(clientSecret);
         this.jwtVerifier = com.auth0.jwt.JWT.require(algorithm)
                 .withIssuer(issuer)
                 .build();
     }
 
-    public String sign(final Claims claims) {
+    public String signRefreshToken(final Claims claims) {
+        return issueJwt(claims, refreshTokenExpirySeconds);
+    }
+
+    public String signAccessToken(final Claims claims) {
+        return issueJwt(claims, accessTokenExpirySeconds);
+    }
+
+    private String issueJwt(
+            final Claims claims,
+            int expirySeconds
+    ) {
         final Date now = new Date();
 
         final JWTCreator.Builder builder = com.auth0.jwt.JWT.create();

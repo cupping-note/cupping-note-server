@@ -48,10 +48,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
             final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().getValue()));
 
-            final String token = getToken(user.getId(), user.getEmail(), authorities);
+            final String refreshToken = getRefreshToken(user.getId(), user.getEmail(), authorities);
+            final String accessToken = getAccessToken(user.getId(), user.getEmail(), authorities);
 
             final JwtAuthenticationToken authenticated = new JwtAuthenticationToken(
-                    new JwtAuthentication(token, user.getId(), user.getEmail()),
+                    new JwtAuthentication(refreshToken, accessToken,  user.getId(), user.getEmail()),
                     null,
                     authorities
             );
@@ -65,16 +66,26 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    private String getToken(
+    private String getRefreshToken(
             final Long userId,
             final String email,
             final List<GrantedAuthority> authorities
     ) {
-        final String[] roles = authorities
+        return jwt.signRefreshToken(Claims.from(userId, email, convertToRolesFrom(authorities)));
+    }
+
+    private String getAccessToken(
+            final Long userId,
+            final String email,
+            final List<GrantedAuthority> authorities
+    ) {
+        return jwt.signAccessToken(Claims.from(userId, email, convertToRolesFrom(authorities)));
+    }
+
+    private String[] convertToRolesFrom(List<GrantedAuthority> authorities) {
+        return authorities
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toArray(String[]::new);
-
-        return jwt.sign(Claims.from(userId, email, roles));
     }
 }

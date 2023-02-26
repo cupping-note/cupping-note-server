@@ -13,5 +13,6 @@ public class JwtConfig {
     private String header;
     private String issuer;
     private String clientSecret;
-    private int expirySeconds;
+    private int refreshTokenExpirySeconds;
+    private int accessTokenExpirySeconds;
 }

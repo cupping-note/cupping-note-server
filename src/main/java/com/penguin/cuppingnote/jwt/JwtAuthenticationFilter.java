@@ -39,17 +39,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     ) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
-        final String token = getToken(request);
+        final String accessToken = getToken(request);
 
         try {
-            if (isNotEmpty(token)) {
-                final JwtAuthenticationDto jwtAuthenticationDto = verify(token)
+            if (isNotEmpty(accessToken)) {
+                final JwtAuthenticationDto jwtAuthenticationDto = verify(accessToken)
                         .toJwtAuthenticationDto();
 
                 if (canSetAuthenticationBy(jwtAuthenticationDto)) {
                     SecurityContextHolder.getContext().setAuthentication(
                             JwtAuthenticationToken.of(
-                                    token,
+                                    accessToken,
                                     jwtAuthenticationDto,
                                     request
                             )
