@@ -1,5 +1,6 @@
 package com.penguin.cuppingnote.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationFilter;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationProvider;
@@ -27,6 +28,7 @@ import java.util.Objects;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfig jwtConfig;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void configure(final WebSecurity webSecurity) {
@@ -86,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(
                 jwtConfig.getHeader(),
-                getApplicationContext().getBean(Jwt.class)
+                getApplicationContext().getBean(Jwt.class),
+                objectMapper
         );
     }
 

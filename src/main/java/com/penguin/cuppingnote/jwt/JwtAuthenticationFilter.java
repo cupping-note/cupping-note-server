@@ -1,7 +1,10 @@
 package com.penguin.cuppingnote.jwt;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.penguin.cuppingnote.common.exception.ErrorResponse;
+import com.penguin.cuppingnote.common.exception.jwt.ExpiredTokenException;
+import com.penguin.cuppingnote.common.exception.jwt.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -9,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -32,31 +36,33 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             final ServletRequest req,
             final ServletResponse res,
             final FilterChain chain
-    ) throws IOException {
+    ) throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
         final String token = getToken(request);
 
         try {
-            final JwtAuthenticationDto jwtAuthenticationDto = verify(token)
-                    .toJwtAuthenticationDto();
+            if (isNotEmpty(token)) {
+                final JwtAuthenticationDto jwtAuthenticationDto = verify(token)
+                        .toJwtAuthenticationDto();
 
-            if (canSetAuthenticationBy(jwtAuthenticationDto)) {
-                SecurityContextHolder.getContext().setAuthentication(
-                        JwtAuthenticationToken.of(
-                                token,
-                                jwtAuthenticationDto,
-                                request
-                        )
-                );
+                if (canSetAuthenticationBy(jwtAuthenticationDto)) {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            JwtAuthenticationToken.of(
+                                    token,
+                                    jwtAuthenticationDto,
+                                    request
+                            )
+                    );
+                }
             }
-
-            chain.doFilter(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JWTVerificationException | ExpiredTokenException | InvalidTokenException e) {
+            log.error(e.getMessage(), e);
             setErrorResponseHeaders(response);
             setErrorMessage(response, e.getMessage());
         }
+
+        chain.doFilter(request, response);
     }
 
     private String getToken(final HttpServletRequest request) {
