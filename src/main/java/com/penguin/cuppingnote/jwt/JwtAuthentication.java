@@ -17,7 +17,7 @@ public class JwtAuthentication {
             final Long userId,
             final String email
     ) {
-        if (Objects.isNull(refreshToken) || Objects.isNull(accessToken))
+        if (Objects.isNull(accessToken))
             throw new TokenNotFoundException();
         if (Objects.isNull(userId))
             throw new UserInformationNotFoundException();
