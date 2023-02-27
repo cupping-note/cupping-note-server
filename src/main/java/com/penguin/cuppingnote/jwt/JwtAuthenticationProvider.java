@@ -1,8 +1,8 @@
 package com.penguin.cuppingnote.jwt;
 
 import com.penguin.cuppingnote.common.exception.user.UserNotFoundException;
-import com.penguin.cuppingnote.user.domain.User;
-import com.penguin.cuppingnote.user.domain.UserRepository;
+import com.penguin.cuppingnote.user.domain.user.User;
+import com.penguin.cuppingnote.user.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationProvider;

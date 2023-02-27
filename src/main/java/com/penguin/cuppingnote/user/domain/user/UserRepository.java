@@ -1,4 +1,4 @@
-package com.penguin.cuppingnote.user.domain;
+package com.penguin.cuppingnote.user.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

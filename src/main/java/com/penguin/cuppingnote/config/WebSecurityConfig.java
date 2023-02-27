@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationFilter;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationProvider;
-import com.penguin.cuppingnote.user.domain.UserRepository;
+import com.penguin.cuppingnote.user.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
