@@ -32,8 +32,8 @@ public class UserService {
         final JwtAuthentication authentication = getJwtBy(user.getEmail());
 
         return UserLoginResponseDto.succeed(
-                authentication.refreshToken,
-                authentication.accessToken,
+                authentication.getRefreshToken(),
+                authentication.getAccessToken(),
                 user.getId()
         );
     }

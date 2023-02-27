@@ -2,14 +2,16 @@ package com.penguin.cuppingnote.jwt;
 
 import com.penguin.cuppingnote.common.exception.jwt.TokenNotFoundException;
 import com.penguin.cuppingnote.common.exception.jwt.UserInformationNotFoundException;
+import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public class JwtAuthentication {
-    public final String refreshToken;
-    public final String accessToken;
-    public final Long userId;
-    public final String email;
+    private final String refreshToken;
+    private final String accessToken;
+    private final Long userId;
+    private final String email;
 
     public JwtAuthentication(
             final String refreshToken,
