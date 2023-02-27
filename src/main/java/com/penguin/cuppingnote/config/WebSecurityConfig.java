@@ -99,6 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers(HttpMethod.POST, "/user/kakao/login").permitAll()
+                    .antMatchers(HttpMethod.POST, "/user/token").permitAll()
                     .antMatchers(HttpMethod.GET, "/swagger").permitAll()
                     .anyRequest().authenticated()
                     .and()
