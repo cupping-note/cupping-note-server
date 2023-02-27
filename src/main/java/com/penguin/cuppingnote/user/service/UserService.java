@@ -1,10 +1,13 @@
 package com.penguin.cuppingnote.user.service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthentication;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationToken;
 import com.penguin.cuppingnote.oauth.service.OAuthService;
-import com.penguin.cuppingnote.user.domain.User;
-import com.penguin.cuppingnote.user.domain.UserRepository;
+import com.penguin.cuppingnote.user.domain.session.SessionRepository;
+import com.penguin.cuppingnote.user.domain.user.User;
+import com.penguin.cuppingnote.user.domain.user.UserRepository;
 import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
 import com.penguin.cuppingnote.user.dto.request.UserKakaoLoginRequestDto;
 import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
@@ -21,6 +24,8 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final OAuthService oAuthService;
     private final UserRepository userRepository;
+    private final SessionRepository sessionRepository;
+    private final Jwt jwt;
 
     @Transactional
     public UserLoginResponseDto loginByKakao(UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
@@ -30,6 +35,11 @@ public class UserService {
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
 
         final JwtAuthentication authentication = getJwtBy(user.getEmail());
+
+        // refresh token으로 access token 갱신할 때 사용하기 위해 유효한 refresh token 저장
+        sessionRepository.save(
+                user.toSession(authentication, decode(authentication))
+        );
 
         return UserLoginResponseDto.succeed(
                 authentication.getRefreshToken(),
@@ -44,5 +54,11 @@ public class UserService {
         final Authentication resultToken = authenticationManager.authenticate(authToken);
 
         return (JwtAuthentication) resultToken.getPrincipal();
+    }
+
+    private DecodedJWT decode(final JwtAuthentication authentication) {
+        return jwt
+                .getJwtVerifier()
+                .verify(authentication.getRefreshToken());
     }
 }
