@@ -2,6 +2,7 @@ package com.penguin.cuppingnote.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -69,6 +70,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(e.getHttpStatus())
                 .body(new ErrorResponse(errorMessage));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> dataIntegrityViolationException(
+            final DataIntegrityViolationException e
+    ) {
+       final String errorMessage = e.getMessage();
+
+       log.error(LOG_FORMAT, e.getClass().getSimpleName(), errorMessage);
+
+        ExceptionType exceptionType = DataIntegrityViolationExceptionType.findByErrorMessage(errorMessage)
+                .getExceptionType();
+
+        return ResponseEntity
+               .status(exceptionType.getHttpStatus())
+                .body(new ErrorResponse(exceptionType.getMessage()));
     }
 
     @ExceptionHandler(DataAccessException.class)

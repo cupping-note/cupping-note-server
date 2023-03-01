@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+import static com.penguin.cuppingnote.oauth.domain.OAuthPlatforms.KAKAO;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,7 +35,7 @@ public class UserService {
     public UserLoginResponseDto loginByKakao(UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
         final OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(userKakaoLoginRequestDto);
 
-        final User user = userRepository.findByEmail(kakaoUserEntity.getKakaoAccount().getEmail())
+        final User user = userRepository.findByEmailAndOauthPlatform(kakaoUserEntity.getKakaoAccount().getEmail(), KAKAO)
                 .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
 
         final JwtAuthentication authentication = jwtAuthenticationProvider.issueJwtBy(user.getEmail());
