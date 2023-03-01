@@ -10,7 +10,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public enum DataIntegrityViolationExceptionType {
 
-    UNIQUE_USER_EMAIL("PUBLIC.USERS_PK_INDEX_4 ON PUBLIC.USERS(EMAIL NULLS FIRST)", ExceptionType.USER_ALREADY_EXIST);
+    UNIQUE_USER_EMAIL("PUBLIC.USERS_PK_INDEX_4 ON PUBLIC.USERS(EMAIL NULLS FIRST)", ExceptionType.USER_ALREADY_EXIST),
+    DEFAULT(null, ExceptionType.DB_VIOLATION);
 
     private final String errorMessage;
     private final ExceptionType exceptionType;
@@ -19,6 +20,6 @@ public enum DataIntegrityViolationExceptionType {
         return Stream.of(values())
                 .filter(exceptionType -> StringUtils.contains(errorMessage, exceptionType.errorMessage))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElse(DEFAULT);
     }
 }
