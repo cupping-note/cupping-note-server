@@ -88,4 +88,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 .map(GrantedAuthority::getAuthority)
                 .toArray(String[]::new);
     }
+
+    public JwtAuthentication issueJwtBy(String email) {
+        final JwtAuthenticationToken authToken = new JwtAuthenticationToken(email);
+
+        final Authentication resultToken = authenticate(authToken);
+
+        return (JwtAuthentication) resultToken.getPrincipal();
+    }
 }
