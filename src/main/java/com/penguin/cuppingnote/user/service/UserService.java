@@ -1,9 +1,7 @@
 package com.penguin.cuppingnote.user.service;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.penguin.cuppingnote.common.exception.jwt.ExpiredTokenException;
 import com.penguin.cuppingnote.common.exception.jwt.TokenNotFoundException;
-import com.penguin.cuppingnote.jwt.Jwt;
 import com.penguin.cuppingnote.jwt.JwtAuthentication;
 import com.penguin.cuppingnote.jwt.JwtAuthenticationProvider;
 import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
@@ -27,7 +25,6 @@ import static com.penguin.cuppingnote.oauth.domain.OAuthPlatforms.KAKAO;
 @RequiredArgsConstructor
 public class UserService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
-    private final Jwt jwt;
     private final OAuthService oAuthService;
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
@@ -44,7 +41,11 @@ public class UserService {
 
         // refresh token으로 access token 갱신할 때 사용하기 위해 유효한 refresh token 저장
         sessionRepository.save(
-                userMapper.toSessionEntityBy(user, authentication, decode(authentication))
+                userMapper.toSessionEntityBy(
+                        user,
+                        authentication,
+                        jwtAuthenticationProvider.getDecodedJwt(authentication)
+                )
         );
 
         return UserLoginResponseDto.succeed(
@@ -52,12 +53,6 @@ public class UserService {
                 authentication.getAccessToken(),
                 user.getId()
         );
-    }
-
-    private DecodedJWT decode(final JwtAuthentication authentication) {
-        return jwt
-                .getJwtVerifier()
-                .verify(authentication.getRefreshToken());
     }
 
     // 만료된 refresh token 일 때 exception(= unchecked) 발생 시킨 후 토큰 삭제하기 위해 roll back x

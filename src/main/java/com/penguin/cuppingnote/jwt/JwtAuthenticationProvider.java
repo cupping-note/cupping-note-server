@@ -1,5 +1,6 @@
 package com.penguin.cuppingnote.jwt;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.penguin.cuppingnote.common.exception.user.UserNotFoundException;
 import com.penguin.cuppingnote.user.domain.user.User;
 import com.penguin.cuppingnote.user.domain.user.UserRepository;
@@ -95,5 +96,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         final Authentication resultToken = authenticate(authToken);
 
         return (JwtAuthentication) resultToken.getPrincipal();
+    }
+
+    public DecodedJWT getDecodedJwt(final JwtAuthentication authentication) {
+        return jwt
+                .getJwtVerifier()
+                .verify(authentication.getRefreshToken());
     }
 }
