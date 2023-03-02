@@ -3,7 +3,10 @@ package com.penguin.cuppingnote.user.domain.session;
 import com.penguin.cuppingnote.common.domain.BaseEntity;
 import com.penguin.cuppingnote.common.exception.jwt.ExpiredTokenException;
 import com.penguin.cuppingnote.user.domain.user.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -12,7 +15,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE sessions SET deleted_at = now() WHERE id = ?")

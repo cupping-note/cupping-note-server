@@ -44,7 +44,7 @@ public class UserService {
 
         // refresh token으로 access token 갱신할 때 사용하기 위해 유효한 refresh token 저장
         sessionRepository.save(
-                user.toSession(authentication, decode(authentication))
+                userMapper.toSessionEntityBy(user, authentication, decode(authentication))
         );
 
         return UserLoginResponseDto.succeed(
