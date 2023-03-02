@@ -15,6 +15,7 @@ import com.penguin.cuppingnote.user.domain.user.UserRepository;
 import com.penguin.cuppingnote.user.dto.request.RefreshAccessTokenRequestDto;
 import com.penguin.cuppingnote.user.dto.request.UserKakaoLoginRequestDto;
 import com.penguin.cuppingnote.user.dto.response.UserLoginResponseDto;
+import com.penguin.cuppingnote.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +27,18 @@ import static com.penguin.cuppingnote.oauth.domain.OAuthPlatforms.KAKAO;
 @RequiredArgsConstructor
 public class UserService {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final Jwt jwt;
     private final OAuthService oAuthService;
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
-    private final Jwt jwt;
+    private final UserMapper userMapper;
 
     @Transactional
     public UserLoginResponseDto loginByKakao(UserKakaoLoginRequestDto userKakaoLoginRequestDto) {
         final OAuthKakaoUserResponse kakaoUserEntity = oAuthService.getKakaoUserEntity(userKakaoLoginRequestDto);
 
         final User user = userRepository.findByEmailAndOauthPlatform(kakaoUserEntity.getKakaoAccount().getEmail(), KAKAO)
-                .orElseGet(() -> userRepository.save(kakaoUserEntity.toUserEntity()));
+                .orElseGet(() -> userRepository.save(userMapper.toEntityBy(kakaoUserEntity)));
 
         final JwtAuthentication authentication = jwtAuthenticationProvider.issueJwtBy(user.getEmail());
 
