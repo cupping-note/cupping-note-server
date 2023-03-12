@@ -31,21 +31,21 @@ public class UserPreference extends BaseEntity {
     @Comment("사용자 ID")
     private Long userId;
 
-    @Column(name = "flavor", nullable = false)
+    @Column(name = "aroma", nullable = false)
     @Comment("향")
-    private Integer flavor;
+    private Integer aroma;
 
     @Column(name = "acidity", nullable = false)
     @Comment("산미")
     private Integer acidity;
 
-    @Column(name = "sweet", nullable = false)
+    @Column(name = "sweetness", nullable = false)
     @Comment("당도")
-    private Integer sweet;
+    private Integer sweetness;
 
-    @Column(name = "bitter", nullable = false)
+    @Column(name = "bitterness", nullable = false)
     @Comment("쓴맛")
-    private Integer bitter;
+    private Integer bitterness;
 
     @Column(name = "body", nullable = false)
     @Comment("바디감")

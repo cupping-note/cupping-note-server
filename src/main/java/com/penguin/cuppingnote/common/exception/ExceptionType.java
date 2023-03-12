@@ -19,7 +19,10 @@ public enum ExceptionType {
     USER_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 다른 SNS로 회원 가입된 이메일입니다."),
 
     // DB
-    DB_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, "DB key 정책에 위배되었습니다.");
+    DB_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, "DB key 정책에 위배되었습니다."),
+
+    // PREF
+    BAD_PREF_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 취향 테스트 입력값입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

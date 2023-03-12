@@ -27,7 +27,7 @@ public class PrefTestRequestDto {
             required = true
     )
     @NotNull(message = "향이 입력되지 않았습니다.")
-    private Integer flavor;
+    private Integer aroma;
 
     @Schema(
             description = "산미",
@@ -43,7 +43,7 @@ public class PrefTestRequestDto {
             required = true
     )
     @NotNull(message = "당도가 입력되지 않았습니다.")
-    private Integer sweet;
+    private Integer sweetness;
 
     @Schema(
             description = "쓴맛",
@@ -51,7 +51,7 @@ public class PrefTestRequestDto {
             required = true
     )
     @NotNull(message = "쓴맛이 입력되지 않았습니다.")
-    private Integer bitter;
+    private Integer bitterness;
 
     @Schema(
             description = "바디감",

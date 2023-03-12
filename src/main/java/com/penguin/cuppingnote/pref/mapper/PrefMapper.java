@@ -17,10 +17,10 @@ public interface PrefMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "userId", source = "prefTestRequestDto.userId"),
-            @Mapping(target = "flavor", source = "prefTestRequestDto.flavor"),
+            @Mapping(target = "aroma", source = "prefTestRequestDto.aroma"),
             @Mapping(target = "acidity", source = "prefTestRequestDto.acidity"),
-            @Mapping(target = "sweet", source = "prefTestRequestDto.sweet"),
-            @Mapping(target = "bitter", source = "prefTestRequestDto.bitter"),
+            @Mapping(target = "sweetness", source = "prefTestRequestDto.sweetness"),
+            @Mapping(target = "bitterness", source = "prefTestRequestDto.bitterness"),
             @Mapping(target = "body", source = "prefTestRequestDto.body"),
     })
     UserPreference toPrefEntityBy(PrefTestRequestDto prefTestRequestDto);

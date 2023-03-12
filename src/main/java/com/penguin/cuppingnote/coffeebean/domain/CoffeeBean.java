@@ -30,22 +30,22 @@ public class CoffeeBean extends BaseEntity {
     @Comment("원두 이름")
     private String name;
 
-    @Column(name = "flavor", nullable = false)
+    @Column(name = "aroma", nullable = false)
     @Comment("향")
     // TODO enum?
-    private Integer flavor;
+    private Integer aroma;
 
     @Column(name = "acidity", nullable = false)
     @Comment("산미")
     private Integer acidity;
 
-    @Column(name = "sweet", nullable = false)
+    @Column(name = "sweetness", nullable = false)
     @Comment("당도")
-    private Integer sweet;
+    private Integer sweetness;
 
-    @Column(name = "bitter", nullable = false)
+    @Column(name = "bitterness", nullable = false)
     @Comment("쓴맛")
-    private Integer bitter;
+    private Integer bitterness;
 
     @Column(name = "body", nullable = false)
     @Comment("바디감")
