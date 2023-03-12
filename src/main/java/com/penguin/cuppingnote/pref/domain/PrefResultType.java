@@ -1,10 +1,11 @@
-package com.penguin.cuppingnote.coffeebean.domain;
+package com.penguin.cuppingnote.pref.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public enum Flavor {
+public enum PrefResultType {
+    BALANCE("balance"),
     AROMA("aroma"),
     ACIDITY("acidity"),
     SWEETNESS("sweetness"),
@@ -14,7 +15,7 @@ public enum Flavor {
     @JsonValue
     private final String typeText;
 
-    Flavor(String typeText) {
+    PrefResultType(String typeText) {
         this.typeText = typeText;
     }
 }

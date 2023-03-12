@@ -1,15 +1,10 @@
 package com.penguin.cuppingnote.pref.mapper;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.penguin.cuppingnote.jwt.JwtAuthentication;
-import com.penguin.cuppingnote.oauth.dto.resonse.OAuthKakaoUserResponse;
+import com.penguin.cuppingnote.coffeebean.domain.Flavor;
+import com.penguin.cuppingnote.pref.domain.PrefResultType;
 import com.penguin.cuppingnote.pref.domain.UserPreference;
 import com.penguin.cuppingnote.pref.dto.request.PrefTestRequestDto;
-import com.penguin.cuppingnote.user.domain.session.Session;
-import com.penguin.cuppingnote.user.domain.user.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface PrefMapper {
@@ -22,6 +17,16 @@ public interface PrefMapper {
             @Mapping(target = "sweetness", source = "prefTestRequestDto.sweetness"),
             @Mapping(target = "bitterness", source = "prefTestRequestDto.bitterness"),
             @Mapping(target = "body", source = "prefTestRequestDto.body"),
+            @Mapping(target = "resultType", source = "prefResultType"),
     })
-    UserPreference toPrefEntityBy(PrefTestRequestDto prefTestRequestDto);
+    UserPreference toPrefEntityBy(PrefTestRequestDto prefTestRequestDto, String prefResultType);
+
+    @ValueMappings({
+            @ValueMapping(source = "AROMA", target = "AROMA"),
+            @ValueMapping(source = "ACIDITY", target = "ACIDITY"),
+            @ValueMapping(source = "SWEETNESS", target = "SWEETNESS"),
+            @ValueMapping(source = "BITTERNESS", target = "BITTERNESS"),
+            @ValueMapping(source = "BODY", target = "BODY")
+    })
+    PrefResultType toPrefResultTypeBy(Flavor flavor);
 }

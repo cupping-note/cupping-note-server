@@ -50,4 +50,8 @@ public class UserPreference extends BaseEntity {
     @Column(name = "body", nullable = false)
     @Comment("바디감")
     private Integer body;
+
+    @Column(name = "result_type", nullable = false)
+    @Comment("취향 테스트 결과 타입")
+    private String resultType;
 }

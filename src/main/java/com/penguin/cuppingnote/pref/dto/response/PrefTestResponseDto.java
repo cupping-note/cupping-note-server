@@ -1,5 +1,6 @@
 package com.penguin.cuppingnote.pref.dto.response;
 
+import com.penguin.cuppingnote.pref.domain.PrefResultType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -8,17 +9,18 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PrefTestResponseDto {
+
     @Schema(
-            description = "결과 이미지 url",
-            example = "https://cupping.cpglcdn.com/images/result/flavor.png"
+            description = "취향 테스트 결과 타입",
+            example = "balance"
     )
-    private String resultImageUrl;
+    private PrefResultType resultType;
 
     public static PrefTestResponseDto succeed(
-            String resultImageUrl
+            PrefResultType resultType
     ) {
         return PrefTestResponseDto.builder()
-                .resultImageUrl(resultImageUrl)
+                .resultType(resultType)
                 .build();
     }
 }
