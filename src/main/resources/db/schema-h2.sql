@@ -33,5 +33,42 @@ create table sessions
     index sessions_refresh_token_index(`refresh_token`),
     index sessions_user_id_index(`user_id`)
 )
-    comment '사용자 refresh_token 관리 테이블';
+comment '사용자 refresh_token 관리 테이블';
+
+create table coffee_bean
+(
+    `id`            bigint auto_increment comment 'id',
+    `name`          varchar(128)                       not null comment '원두 이름',
+    `flavor`        int                                not null comment '향',
+    `acidity`       int                                not null comment '산미',
+    `sweet`         int                                not null comment '당도',
+    `bitter`        int                                not null comment '쓴맛',
+    `body`          int                                not null comment '바디감',
+    `image_url`      varchar(256)                       not null comment '원두 이미지 url',
+    `nation`        varchar(128)                       not null comment '국가',
+    `feature`       varchar(512)                       not null comment '특징',
+    `created_at`    datetime                           not null default CURRENT_TIMESTAMP comment '생성한 시간',
+    `updated_at`    datetime                           not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '수정한 시간',
+    `deleted_at`    datetime                           null comment '삭제한 시간',
+    primary key (`id`),
+    index coffee_bean_name_index(`name`)
+)
+comment '원두 테이블';
+
+create table user_preference
+(
+    `id`            bigint auto_increment comment 'id',
+    `user_id`       bigint                             not null comment '사용자 ID',
+    `flavor`        int                                not null comment '향',
+    `acidity`       int                                not null comment '산미',
+    `sweet`         int                                not null comment '당도',
+    `bitter`        int                                not null comment '쓴맛',
+    `body`          int                                not null comment '바디감',
+    `created_at`    datetime                           not null default CURRENT_TIMESTAMP comment '생성한 시간',
+    `updated_at`    datetime                           not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '수정한 시간',
+    `deleted_at`    datetime                           null comment '삭제한 시간',
+    primary key (`id`),
+    constraint user_preference_users_null_fk foreign key (`user_id`) references users (`id`)
+)
+comment '유저 취향 테이블';
 
