@@ -22,13 +22,13 @@ public class PrefService {
 
     @Transactional
     public PrefTestResponseDto getTestResult(PrefTestRequestDto prefTestRequestDto) {
-        PrefResultType resultType = getResponseType(prefTestRequestDto);
+        PrefResultType resultType = getPrefResultType(prefTestRequestDto);
         PrefTestResponseDto prefTestResponseDto = PrefTestResponseDto.succeed(resultType);
         prefRepository.save(prefMapper.toPrefEntityBy(prefTestRequestDto, resultType.getTypeText()));
         return prefTestResponseDto;
     }
 
-    private PrefResultType getResponseType(PrefTestRequestDto prefTestRequestDto) {
+    private PrefResultType getPrefResultType(PrefTestRequestDto prefTestRequestDto) {
         Map<Flavor, Integer> flavorScoreMap = fieldsToMap(prefTestRequestDto);
         int max = Collections.max(flavorScoreMap.values());
 
@@ -65,7 +65,15 @@ public class PrefService {
         result.put(Flavor.SWEETNESS, prefTestRequestDto.getSweetness());
         result.put(Flavor.BITTERNESS, prefTestRequestDto.getBitterness());
         result.put(Flavor.BODY, prefTestRequestDto.getBody());
+
+        result.values().forEach(score -> {
+            if (!isValidScore(score)) throw new BadPrefRequestException();
+        });
         return result;
+    }
+    
+    private boolean isValidScore(Integer score) {
+        return score >= 0 && score <= 5;
     }
 
     private Map<Flavor, Integer> getMaxFlavorScoreMap(int max, Map<Flavor, Integer> flavorScoreMap) {
