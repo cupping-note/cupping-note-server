@@ -1,5 +1,7 @@
 package com.penguin.cuppingnote.pref.controller;
 
+import com.penguin.cuppingnote.pref.domain.PrefResultType;
+import com.penguin.cuppingnote.pref.dto.RecommendCoffeeBean;
 import com.penguin.cuppingnote.pref.dto.request.PrefTestRequestDto;
 import com.penguin.cuppingnote.pref.dto.response.PrefTestResponseDto;
 import com.penguin.cuppingnote.pref.service.PrefService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Api(tags = {"취향 테스트 API"})
 @RestController
@@ -32,10 +35,11 @@ public class PrefController {
     })
     @PostMapping("/result")
     public ResponseEntity<PrefTestResponseDto> getTestResult(@Valid @RequestBody PrefTestRequestDto prefTestRequestDto) {
+        PrefResultType prefResultType = prefService.getTestResult(prefTestRequestDto);
+        List<RecommendCoffeeBean> recommendCoffeeBeans = prefService.getRecommendCoffeeBeans(prefTestRequestDto);
         return ResponseEntity.ok(
-                prefService.getTestResult(prefTestRequestDto)
+                PrefTestResponseDto.succeed(prefResultType, recommendCoffeeBeans)
         );
     }
 
-    // TODO: 취향 추천
 }

@@ -1,8 +1,11 @@
 package com.penguin.cuppingnote.pref.dto.response;
 
 import com.penguin.cuppingnote.pref.domain.PrefResultType;
+import com.penguin.cuppingnote.pref.dto.RecommendCoffeeBean;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,11 +19,15 @@ public class PrefTestResponseDto {
     )
     private PrefResultType resultType;
 
+    private List<RecommendCoffeeBean> recommendCoffeeBeans;
+
     public static PrefTestResponseDto succeed(
-            PrefResultType resultType
+            PrefResultType resultType,
+            List<RecommendCoffeeBean> recommendCoffeeBeans
     ) {
         return PrefTestResponseDto.builder()
                 .resultType(resultType)
+                .recommendCoffeeBeans(recommendCoffeeBeans)
                 .build();
     }
 }

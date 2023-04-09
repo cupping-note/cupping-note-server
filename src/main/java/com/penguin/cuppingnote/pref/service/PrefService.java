@@ -1,11 +1,13 @@
 package com.penguin.cuppingnote.pref.service;
 
+import com.penguin.cuppingnote.coffeebean.domain.CoffeeBean;
 import com.penguin.cuppingnote.coffeebean.domain.Flavor;
 import com.penguin.cuppingnote.common.exception.pref.BadPrefRequestException;
+import com.penguin.cuppingnote.pref.domain.RecommendCoffeeBeanRepository;
 import com.penguin.cuppingnote.pref.domain.PrefRepository;
 import com.penguin.cuppingnote.pref.domain.PrefResultType;
+import com.penguin.cuppingnote.pref.dto.RecommendCoffeeBean;
 import com.penguin.cuppingnote.pref.dto.request.PrefTestRequestDto;
-import com.penguin.cuppingnote.pref.dto.response.PrefTestResponseDto;
 import com.penguin.cuppingnote.pref.mapper.PrefMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,13 +21,16 @@ public class PrefService {
 
     private final PrefMapper prefMapper;
     private final PrefRepository prefRepository;
+    private final RecommendCoffeeBeanRepository recommendCoffeeBeanRepository;
+
+    public static final int MAX_DISTANCE = 25;
+    public static final int RECOMMEND_SIZE = 2;
 
     @Transactional
-    public PrefTestResponseDto getTestResult(PrefTestRequestDto prefTestRequestDto) {
+    public PrefResultType getTestResult(PrefTestRequestDto prefTestRequestDto) {
         PrefResultType resultType = getPrefResultType(prefTestRequestDto);
-        PrefTestResponseDto prefTestResponseDto = PrefTestResponseDto.succeed(resultType);
         prefRepository.save(prefMapper.toPrefEntityBy(prefTestRequestDto, resultType.getTypeText()));
-        return prefTestResponseDto;
+        return resultType;
     }
 
     private PrefResultType getPrefResultType(PrefTestRequestDto prefTestRequestDto) {
@@ -71,7 +76,7 @@ public class PrefService {
         });
         return result;
     }
-    
+
     private boolean isValidScore(Integer score) {
         return score >= 0 && score <= 5;
     }
@@ -84,6 +89,35 @@ public class PrefService {
             }
         }
         return maxMap;
+    }
+
+    @Transactional
+    public List<RecommendCoffeeBean> getRecommendCoffeeBeans(PrefTestRequestDto prefTestRequestDto) {
+        List<CoffeeBean> coffeeBeans = recommendCoffeeBeanRepository.findSimilarCoffeeBeansWithDistance(prefTestRequestDto.getAroma(), prefTestRequestDto.getAcidity(), prefTestRequestDto.getSweetness(), prefTestRequestDto.getBitterness(), prefTestRequestDto.getBody());
+        return calculateSimilarity(prefTestRequestDto, makeRecommendCoffeeBeansWithExactSize(coffeeBeans));
+    }
+
+    private List<CoffeeBean> makeRecommendCoffeeBeansWithExactSize(List<CoffeeBean> coffeeBeans) {
+        if (coffeeBeans.isEmpty() || coffeeBeans.size() < RECOMMEND_SIZE) {
+            coffeeBeans.addAll(recommendCoffeeBeanRepository.findTwoRandomCoffeeBeans());
+        }
+        coffeeBeans = coffeeBeans.subList(0, RECOMMEND_SIZE);
+        return coffeeBeans;
+    }
+
+    private static List<RecommendCoffeeBean> calculateSimilarity(PrefTestRequestDto prefTestRequestDto, List<CoffeeBean> coffeeBeans) {
+        List<RecommendCoffeeBean> recommendCoffeeBeans = new ArrayList<>();
+        for (CoffeeBean coffeeBean : coffeeBeans) {
+            int distance = Math.abs(prefTestRequestDto.getAroma() - coffeeBean.getAroma())
+                    + Math.abs(prefTestRequestDto.getAcidity() - coffeeBean.getAcidity())
+                    + Math.abs(prefTestRequestDto.getSweetness() - coffeeBean.getSweetness())
+                    + Math.abs(prefTestRequestDto.getBitterness() - coffeeBean.getBitterness())
+                    + Math.abs(prefTestRequestDto.getBody() - coffeeBean.getBody());
+
+            Double similarity = 100.0 - ((double)distance / MAX_DISTANCE) * 100.0;
+            recommendCoffeeBeans.add(new RecommendCoffeeBean(coffeeBean, similarity));
+        }
+        return recommendCoffeeBeans;
     }
 
 }
